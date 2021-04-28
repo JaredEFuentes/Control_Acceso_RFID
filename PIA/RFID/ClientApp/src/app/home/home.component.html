@@ -1,31 +1,9 @@
-<h1>RFID</h1>
-
 <div class="container">
-  <div class="row justify-content-md-center">
-    <div class="col col-lg-2">
-      1 of 3
-    </div>
-    <div class="col-md-auto">
-      Variable width content
-    </div>
-    <div class="col col-lg-2">
-      3 of 3
-    </div>
-  </div>
-  <div class="row">
-    <div class="col">
-      1 of 3
-    </div>
-    <div class="col-md-auto">
-      Variable width content
-    </div>
-    <div class="col col-lg-2">
-      3 of 3
-    </div>
-  </div>
+    <h1 class="item">RFID</h1>
+    <button class="item button tick" href="http://localhost:4200">Actualizar</button>
 </div>
 
-<table class='table table-striped' aria-labelledby="tableLabel" *ngIf="empleados">
+<table class='table table-striped' aria-labelledby="tableLabel" *ngIf="this.getJson()">
     <thead>
         <tr>
             <th>ID</th>
@@ -34,12 +12,10 @@
         </tr>
     </thead>
     <tbody>
-        <tr *ngFor="let emp of ingresos">
+        <tr *ngFor="let emp of this.getJson()">
             <td>{{ emp.id }}</td>
             <td>{{ emp.nombre }}</td>
             <td>{{ emp.hora }}</td>
         </tr>
     </tbody>
 <table>
-
-|

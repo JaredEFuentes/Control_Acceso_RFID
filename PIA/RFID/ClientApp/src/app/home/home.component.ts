@@ -1,25 +1,29 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Ingreso } from '../interface/ingreso';
 import { EmpleadoService } from '../service/empleado.service';
+import Ingresos from '../../assets/data/ingresos.json';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
+  styleUrls: ['./home.component.css']
 })
-export class HomeComponent {
-  ingresos: Ingreso[]
+export class HomeComponent implements OnInit{
 
   constructor(private empleadoService: EmpleadoService){ }
-  
-  ngOninit(){
-    this.update()
+  ngOnInit(): void {
   }
 
   update(){
     var time = new Date()
     this.empleadoService.getIngresosbyDia(time.getDay()).subscribe(
       arg =>{ 
-        this.ingresos = arg
+        arg
       });
+  }
+  
+  getJson(): Observable<Array<Ingreso>>{
+    return (Ingresos as any);
   }
 }
