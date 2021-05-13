@@ -5,148 +5,58 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using RFID.Helper;
 using RFID.Models;
 
 namespace RFID.Controllers
 {
+    [Route("api/[controller]")]
+    [ApiController]
     public class EmpleadoController : Controller
     {
-        private readonly RFIDContext _context;
+        private readonly RFIDContext context;
 
-        public EmpleadoController(RFIDContext context)
+        public EmpleadoController(RFIDContext _context)
         {
-            _context = context;
+            context = _context;
         }
 
-        // GET: Empleado
-        public async Task<IActionResult> Index()
+        // GET: api/Empleado
+        [HttpGet]
+        public async Task<IEnumerable<Empleado>> GetEmpleados()
         {
-            return View(await _context.Empleado.ToListAsync());
+            return await context.Empleado.ToListAsync();
         }
 
-        // GET: Empleado/Details/5
-        public async Task<IActionResult> Details(int? id)
+        // GET: api/Empleado/rfid
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetEmpleadobyRfid(int id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var empleado = await _context.Empleado
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var empleado = await context.Empleado.FirstOrDefaultAsync(m => m.Id == id);
             if (empleado == null)
             {
-                return NotFound();
+                return NotFound(ErrorHelper.Response(404, "No existe ese id de empleado"));
             }
 
-            return View(empleado);
+            return Ok(empleado);
         }
 
-        // GET: Empleado/Create
-        public IActionResult Create()
-        {
-            return View();
-        }
-
-        // POST: Empleado/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Nombre,Rfid")] Empleado empleado)
+        public async Task<IActionResult> Post([Bind("Nombre,Rfid")] Empleado empleado)
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
-                _context.Add(empleado);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
-            return View(empleado);
-        }
-
-        // GET: Empleado/Edit/5
-        public async Task<IActionResult> Edit(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
+                return BadRequest(ErrorHelper.GetModelStateErrors(ModelState));
             }
 
-            var empleado = await _context.Empleado.FindAsync(id);
-            if (empleado == null)
+            if (await context.Empleado.Where(x => x.Rfid == empleado.Rfid).AnyAsync())
             {
-                return NotFound();
-            }
-            return View(empleado);
-        }
-
-        // POST: Empleado/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Nombre,Rfid")] Empleado empleado)
-        {
-            if (id != empleado.Id)
-            {
-                return NotFound();
+                return BadRequest(ErrorHelper.Response(400, "el rfid ya existe"));
             }
 
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    _context.Update(empleado);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!EmpleadoExists(empleado.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
-            }
-            return View(empleado);
-        }
-
-        // GET: Empleado/Delete/5
-        public async Task<IActionResult> Delete(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var empleado = await _context.Empleado
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (empleado == null)
-            {
-                return NotFound();
-            }
-
-            return View(empleado);
-        }
-
-        // POST: Empleado/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
-        {
-            var empleado = await _context.Empleado.FindAsync(id);
-            _context.Empleado.Remove(empleado);
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
-        }
-
-        private bool EmpleadoExists(int id)
-        {
-            return _context.Empleado.Any(e => e.Id == id);
+            context.Add(empleado);
+            await context.SaveChangesAsync();
+            return Created($"/empleado/{empleado.Id}", empleado);
         }
     }
 }
