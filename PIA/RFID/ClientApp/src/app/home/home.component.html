@@ -1,10 +1,10 @@
 <div class="container">
     <h1 class="item">RFID</h1>
-    <input type="date" id="fecha" name="ingreso-day" value="2021-04-27" min="2020-01-01" max="2021-12-31">
-    <button class="item button tick" onclick="update()"">Actualizar</button>
+    <input type="date" id="fecha" [ngModel]="fecha" name="ingreso-day" value="2021-04-27" min="2020-01-01" max="2021-12-31">
+    <button class="item button tick" (click)="update()">Actualizar</button>
 </div>
 
-<table class='table table-striped' aria-labelledby="tableLabel" *ngIf="this.getJson()">
+<table class='table table-striped' aria-labelledby="tableLabel" *ngIf="ingresos">
     <thead>
         <tr>
             <th>Nombre</th>
@@ -13,10 +13,10 @@
         </tr>
     </thead>
     <tbody>
-        <tr *ngFor="let emp of this.getJson()">
-            <td>{{ emp.nombre }}</td>
-            <td>{{ emp.Fecha.getDate() }}</td>
-            <td>{{ emp.Fecha.getTime() }}</td>
+        <tr *ngFor="let ing of ingresos">
+            <td>{{ ing.nombre }}</td>
+            <td>{{ ing.Fecha }}</td>
+            <td>{{ ing.Hora }}</td>
         </tr>
     </tbody>
 <table>

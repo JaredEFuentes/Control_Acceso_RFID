@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Ingreso } from '../interface/ingreso';
-import { IngresoEmp } from '../interface/ingresosEmp';
+import { IngresosEmp } from '../interface/ingresosEmp';
 
 @Injectable({
   providedIn: 'root'
@@ -19,6 +19,6 @@ export class IngresosService {
 
   getIngresosbyEmp(id: number){
     const path = '${this.server}/byEmp/${id}'; 
-    return this.http.get<IngresoEmp>(path);
+    return this.http.get<IngresosEmp>(path);
   }
 }
