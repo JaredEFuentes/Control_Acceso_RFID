@@ -26,10 +26,7 @@ namespace RFID
             services.AddDbContext<RFIDContext>(options => options.UseSqlServer(Configuration.GetConnectionString("RFID")));
             services.AddControllersWithViews();
             // In production, the Angular files will be served from this directory
-            services.AddSpaStaticFiles(configuration =>
-            {
-                configuration.RootPath = "ClientApp/dist";
-            });
+            
             services.Configure<ApiBehaviorOptions>(options =>
             {
                 options.SuppressModelStateInvalidFilter = true;
@@ -51,11 +48,11 @@ namespace RFID
             }
 
             app.UseHttpsRedirection();
-            app.UseStaticFiles();
-            if (!env.IsDevelopment())
-            {
-                app.UseSpaStaticFiles();
-            }
+            //app.UseStaticFiles();
+            //if (!env.IsDevelopment())
+            //{
+            //    app.UseSpaStaticFiles();
+            //}
 
             app.UseRouting();
 
@@ -65,19 +62,19 @@ namespace RFID
             });
 
 
-            app.UseSpa(spa =>
-            {
+            //app.UseSpa(spa =>
+            //{
                 // To learn more about options for serving an Angular SPA from ASP.NET Core,
                 // see https://go.microsoft.com/fwlink/?linkid=864501
 
-                spa.Options.SourcePath = "ClientApp";
+            //    spa.Options.SourcePath = "ClientApp";
 
-                if (env.IsDevelopment())
-                {
+              //  if (env.IsDevelopment())
+                //{
                     //spa.UseAngularCliServer(npmScript: "start");
-                    spa.UseProxyToSpaDevelopmentServer("http://localhost:4200");
-                }
-            });
+                  //  spa.UseProxyToSpaDevelopmentServer("http://localhost:4200");
+                //}
+            //});
         }
     }
 }
