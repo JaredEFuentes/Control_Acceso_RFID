@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Ingreso } from '../interface/ingreso';
-import { EmpleadoService } from '../service/empleado.service';
+import { IngresosService } from '../services/ingresos.service';
 import Ingresos from '../../assets/data/ingresos.json';
 import { Observable } from 'rxjs';
 
@@ -9,21 +9,19 @@ import { Observable } from 'rxjs';
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.css']
 })
-export class HomeComponent implements OnInit{
+export class HomeComponent{
+  fecha: Date;
+  ingresos: Ingreso[];
 
-  constructor(private empleadoService: EmpleadoService){ }
-  ngOnInit(): void {
-  }
-
+  constructor(private ingresosService: IngresosService){ }
+  
   update(){
-    var time = new Date()
-    this.empleadoService.getIngresosbyDia(time.getDay()).subscribe(
+    this.ingresosService.getIngresosbyDia(this.fecha.getDay(),this.fecha.getMonth(),this.fecha.getFullYear()).subscribe(
       arg =>{ 
-        arg
+        this.ingresos = arg
       });
   }
   
-  getJson(): Observable<Array<Ingreso>>{
-    return (Ingresos as any);
-  }
 }
+
+

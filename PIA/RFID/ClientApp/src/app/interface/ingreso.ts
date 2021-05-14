@@ -1,5 +1,5 @@
 export interface Ingreso {
-    id: number,
-    nombre: string,
-    hora: string
+    RegistroId: number,
+    Nombre: string,
+    Fecha: Date
 }

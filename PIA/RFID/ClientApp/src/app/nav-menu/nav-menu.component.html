@@ -3,7 +3,7 @@
     class="navbar bg-dark navbar-dark navbar-expand-sm navbar-toggleable-sm border-bottom box-shadow mb-3"
   >
     <div class="container">
-      <a class="navbar-brand" [routerLink]="['/']">Recepcion</a>
+      <a class="navbar-brand" [routerLink]="['https://localhost:5001/']">Recepcion</a>
       <button
         class="navbar-toggler"
         type="button"
@@ -25,7 +25,8 @@
             [routerLinkActive]="['link-active']"
             [routerLinkActiveOptions]="{ exact: true }"
           >
-            <a class="nav-link text-light " [routerLink]="['/']">Inicio</a>
+            <a class="nav-link text-light " [routerLink]="['https://localhost:5001/']">Inicio</a>
+            <a class="nav-link text-light " [routerLink]="['https://localhost:5001/byEmp']">Empleado</a>
           </li>
         </ul>
       </div>

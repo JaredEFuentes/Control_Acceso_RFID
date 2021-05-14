@@ -1,21 +1,22 @@
 <div class="container">
     <h1 class="item">RFID</h1>
-    <button class="item button tick" href="http://localhost:4200">Actualizar</button>
+    <input type="date" id="fecha" name="ingreso-day" value="2021-04-27" min="2020-01-01" max="2021-12-31">
+    <button class="item button tick" onclick="update()"">Actualizar</button>
 </div>
 
 <table class='table table-striped' aria-labelledby="tableLabel" *ngIf="this.getJson()">
     <thead>
         <tr>
-            <th>ID</th>
             <th>Nombre</th>
+            <th>Fecha</th>
             <th>Hora</th>
         </tr>
     </thead>
     <tbody>
         <tr *ngFor="let emp of this.getJson()">
-            <td>{{ emp.id }}</td>
             <td>{{ emp.nombre }}</td>
-            <td>{{ emp.hora }}</td>
+            <td>{{ emp.Fecha.getDate() }}</td>
+            <td>{{ emp.Fecha.getTime() }}</td>
         </tr>
     </tbody>
 <table>

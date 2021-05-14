@@ -73,10 +73,17 @@ namespace RFID.Controllers
         [HttpGet("byDay/{day}/{month}/{year}")]
         public async Task<IActionResult> GetIngresosbyDay(int day, int month, int year)
         {
-            var ingreso = await context.Ingresos.ToListAsync();
-            var ingresosByDay = new List<Ingresos>();
+            var ingresoWName = await context.Ingresos.Join(context.Empleado, req => req.EmpleadoId,
+                emp => emp.Id, (req, emp) => new IngresoWNameVM {
+                    RegistroId = req.RegistroId,
+                    Nombre = emp.Nombre,
+                    Fecha = req.Fecha
+                }).ToListAsync();
+
+            var ingresosByDay = new List<IngresoWNameVM>();
             var Fecha = day.ToString() + "/" + month.ToString() + "/" + year.ToString();
-            foreach(Ingresos item in ingreso)
+
+            foreach (IngresoWNameVM item in ingresoWName)
             {
                 string fechaRegistro = item.Fecha.ToShortDateString();
                 if(fechaRegistro == Fecha)

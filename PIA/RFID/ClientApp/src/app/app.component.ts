@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { Ingreso } from './interface/ingreso';
-import { EmpleadoService } from './service/empleado.service';
+import { IngresosService } from './services/ingresos.service';
 
 @Component({
   selector: 'app-root',
@@ -8,15 +8,8 @@ import { EmpleadoService } from './service/empleado.service';
 })
 export class AppComponent {
   title = 'app';
-  ingresos: Ingreso[];
 
-  constructor(private empleadoService: EmpleadoService){ }
+  constructor(){ }
 
-  update(){
-    var time = new Date()
-    this.empleadoService.getIngresosbyDia(time.getDay()).subscribe(
-      arg =>{ 
-        this.ingresos = arg
-      });
-  }
+  
 }

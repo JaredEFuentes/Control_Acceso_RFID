@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using RFID.Helper;
 using RFID.Models;
+using RFID.Models.Views;
 
 namespace RFID.Controllers
 {
@@ -28,9 +29,19 @@ namespace RFID.Controllers
             return await context.Empleado.ToListAsync();
         }
 
-        // GET: api/Empleado/rfid
+        // GET: api/Empleado/WOR
+        [HttpGet("WOR")]
+        public async Task<IEnumerable<EmpleadoVM>> GetEmpleadosWORfid()
+        {
+            return await context.Empleado.Select(s => new EmpleadoVM{
+                Id = s.Id,
+                Nombre = s.Nombre
+            }).ToListAsync();
+        }
+
+        // GET: api/Empleado/id
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetEmpleadobyRfid(int id)
+        public async Task<IActionResult> GetEmpleadobyid(int id)
         {
             var empleado = await context.Empleado.FirstOrDefaultAsync(m => m.Id == id);
             if (empleado == null)
@@ -39,6 +50,23 @@ namespace RFID.Controllers
             }
 
             return Ok(empleado);
+        }
+
+        // GET: api/Empleado/byRfid/rfid
+        [HttpGet("byRfid/{rfid}")]
+        public async Task<IActionResult> GetEmpleadobyRfid(string rfid)
+        {
+            var empleado = await context.Empleado.FirstOrDefaultAsync(m => m.Rfid == rfid);
+            if (empleado == null)
+            {
+                return NotFound(ErrorHelper.Response(404, "No existe ese rfid de empleado"));
+            }
+
+            return Ok(new EmpleadoVM
+            {
+                Id = empleado.Id,
+                Nombre = empleado.Nombre
+            });
         }
 
         [HttpPost]

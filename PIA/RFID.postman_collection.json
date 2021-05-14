@@ -23,7 +23,7 @@
 					}
 				},
 				"url": {
-					"raw": "https://localhost:5001/api/empleado",
+					"raw": "https://localhost:5001/api/empleado/WOR",
 					"protocol": "https",
 					"host": [
 						"localhost"
@@ -31,7 +31,41 @@
 					"port": "5001",
 					"path": [
 						"api",
-						"empleado"
+						"empleado",
+						"WOR"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Empleados (id, Nombre)",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://localhost:5001/api/empleado/WOR",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "5001",
+					"path": [
+						"api",
+						"empleado",
+						"WOR"
 					]
 				}
 			},
@@ -68,6 +102,40 @@
 					]
 				},
 				"description": "Obtener empleado por el id del mismo"
+			},
+			"response": []
+		},
+		{
+			"name": "Get Empleados by Rfid",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://localhost:5001/api/empleado/byRfid/A9890DE9",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "5001",
+					"path": [
+						"api",
+						"empleado",
+						"byRfid",
+						"A9890DE9"
+					]
+				}
 			},
 			"response": []
 		},
