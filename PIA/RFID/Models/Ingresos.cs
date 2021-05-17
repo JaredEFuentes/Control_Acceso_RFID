@@ -12,8 +12,9 @@ namespace RFID.Models
     {
         [Key]
         public int RegistroId { get; set; }
-        [Required(ErrorMessage = "El id del empleado no puede estar vacio")]
+        [Required(ErrorMessage ="El id del empleado es obligatorio")]
         public int EmpleadoId { get; set; }
+        [Required(ErrorMessage = "La fecha de ingreso es obligatoria")]
         public DateTime Fecha { get; set; }
 
         public virtual Empleado Empleado { get; set; }

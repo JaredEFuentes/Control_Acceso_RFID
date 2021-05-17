@@ -30,9 +30,7 @@ namespace RFID.Models
         {
             modelBuilder.Entity<Empleado>(entity =>
             {
-                entity.Property(e => e.Id)
-                    .HasColumnName("id")
-                    .ValueGeneratedOnAdd();
+                entity.Property(e => e.Id).HasColumnName("id");
 
                 entity.Property(e => e.Nombre)
                     .HasColumnName("nombre")
@@ -48,13 +46,11 @@ namespace RFID.Models
             modelBuilder.Entity<Ingresos>(entity =>
             {
                 entity.HasKey(e => e.RegistroId)
-                    .HasName("Pk_ingresos_9DF6E3CE93D08061");
+                    .HasName("PK__ingresos__9DF6E3CECE421960");
 
                 entity.ToTable("ingresos");
 
-                entity.Property(e => e.RegistroId)
-                    .HasColumnName("registro_id")
-                    .ValueGeneratedOnAdd();
+                entity.Property(e => e.RegistroId).HasColumnName("registro_id");
 
                 entity.Property(e => e.EmpleadoId).HasColumnName("empleado_id");
 
@@ -66,7 +62,7 @@ namespace RFID.Models
                     .WithMany(p => p.Ingresos)
                     .HasForeignKey(d => d.EmpleadoId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FL_ingresos_emplea_267ABA7A");
+                    .HasConstraintName("FK__ingresos__emplea__1A14E395");
             });
 
             OnModelCreatingPartial(modelBuilder);

@@ -10,15 +10,21 @@ namespace RFID.Models
 {
     public partial class Empleado
     {
+        public Empleado()
+        {
+            Ingresos = new HashSet<Ingresos>();
+        }
+
         [Key]
         public int Id { get; set; }
-        [Required(ErrorMessage = "El nombre del empleado es obligatorio")]
-        [MinLength(1, ErrorMessage = "El nombre debe ser mayor a 1 caracter")]
+        [Required(ErrorMessage ="El nombre es obligatorio")]
         public string Nombre { get; set; }
-        [Required(ErrorMessage = "El rfid del empleado no puede estar vacio")]
-        [MinLength(10, ErrorMessage = "El rfid debe ser mayor a 10 caracteres")]
+        [Required(ErrorMessage ="El nombre es obligatorio")]
+        [MinLength(10, ErrorMessage ="El rfid debe ser mayor a 10 caracteres")]
         [MaxLength(50, ErrorMessage = "El rfid debe ser menor a 50 caracteres")]
         public string Rfid { get; set; }
+        [Required(ErrorMessage ="El estado del empleado es obligatorio")]
+        public bool Habilitado { get; set; }
 
         public virtual ICollection<Ingresos> Ingresos { get; set; }
     }

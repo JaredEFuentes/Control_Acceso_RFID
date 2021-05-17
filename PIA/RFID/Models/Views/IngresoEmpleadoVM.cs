@@ -12,6 +12,7 @@ namespace RFID.Models.Views
         public int EmpleadoId { get; set; }
         [Required(ErrorMessage = "El usuario no puede estar vacio")]
         public string Nombre { get; set; }
+        public bool Habilitado { get; set; }
         public List<IngresoVM> ingresos { get; set; }
     }
 }

@@ -35,7 +35,8 @@ namespace RFID.Controllers
         {
             return await context.Empleado.Select(s => new EmpleadoVM{
                 Id = s.Id,
-                Nombre = s.Nombre
+                Nombre = s.Nombre,
+                Habilitado = s.Habilitado
             }).ToListAsync();
         }
 
@@ -65,7 +66,8 @@ namespace RFID.Controllers
             return Ok(new EmpleadoVM
             {
                 Id = empleado.Id,
-                Nombre = empleado.Nombre
+                Nombre = empleado.Nombre,
+                Habilitado = empleado.Habilitado
             });
         }
 
@@ -81,10 +83,65 @@ namespace RFID.Controllers
             {
                 return BadRequest(ErrorHelper.Response(400, "el rfid ya existe"));
             }
+	    
+	    empleado.Habilitado = true;
 
             context.Add(empleado);
             await context.SaveChangesAsync();
             return Created($"/empleado/{empleado.Id}", empleado);
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete(int id)
+        {
+            var empleado = await context.Empleado.FindAsync(id);
+            if(empleado == null)
+            {
+                return BadRequest(ErrorHelper.Response(400, "el id de empleado no existe o ya a sido eliminado"));
+            }
+
+            empleado.Habilitado = false;
+            context.Entry(empleado).State = EntityState.Modified;
+            await context.SaveChangesAsync();
+
+            return Ok();
+        }
+
+        [HttpPut("{id}")]
+        public async Task<IActionResult> Put(int id, [Bind("Id, Nombre, Rfid, Hablitado")]Empleado empleado)
+        {
+            if(!await context.Empleado.Where(s => s.Id == empleado.Id).AsNoTracking().AnyAsync())
+            {
+                return NotFound(ErrorHelper.Response(404, "el empleado a modificar no fue encontrado"));
+            }
+            if(await context.Empleado.Where(s => s.Rfid == empleado.Rfid && s.Id != empleado.Id).AnyAsync())
+            {
+                return BadRequest(ErrorHelper.Response(400, "el RFID ya existe"));
+            }
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ErrorHelper.GetModelStateErrors(ModelState));
+            }
+
+            context.Entry(empleado).State = EntityState.Modified;
+            await context.SaveChangesAsync();
+            return NoContent();
+        }
+
+        [HttpPut("Habilitar/{id}")]
+        public async Task<IActionResult> Habilitar(int id)
+        {
+            var empleado = await context.Empleado.FindAsync(id);
+            if (empleado == null)
+            {
+                return BadRequest(ErrorHelper.Response(400, "el id de empleado no existe"));
+            }
+
+            empleado.Habilitado = true;
+            context.Entry(empleado).State = EntityState.Modified;
+            await context.SaveChangesAsync();
+
+            return Ok();
         }
     }
 }

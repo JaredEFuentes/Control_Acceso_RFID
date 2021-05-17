@@ -8,11 +8,13 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using RFID.Models;
+using System;
 
 namespace RFID
 {
     public class Startup
     {
+        private readonly string _Cors = "MyCors";
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -30,6 +32,14 @@ namespace RFID
             services.Configure<ApiBehaviorOptions>(options =>
             {
                 options.SuppressModelStateInvalidFilter = true;
+            });
+
+            services.AddCors(options =>
+            {
+                options.AddPolicy(name: _Cors, builder =>
+                {
+                    builder.SetIsOriginAllowed(origin => new Uri(origin).Host == "localhost").AllowAnyHeader().AllowAnyMethod();
+                });
             });
         }
 
@@ -49,6 +59,8 @@ namespace RFID
             //}
 
             app.UseRouting();
+
+            app.UseCors(_Cors);
 
             app.UseAuthorization();
 

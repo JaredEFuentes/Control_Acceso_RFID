@@ -1,0 +1,35 @@
+<div class="container">
+    <mat-toolbar color="" class="mat-elevation-z8">
+        <span>Agregar Empleado</span>
+    </mat-toolbar>
+
+    <mat-card style="margin-top: 10px;">
+
+        <form [formGroup]="form" (ngSubmit)="agregarEmpleado()">
+            <mat-grid-list cols="4" rowHeight="70px">
+                <mat-grid-tile [colspan]="1" [rowspan]="1"
+                    [style.background]="'lightblue'">
+                    Ingrese los datos siguientes
+                </mat-grid-tile>
+                <mat-grid-tile [colspan]="1" [rowspan]="1">
+                    <mat-form-field class="ancho">
+                        <mat-label>Nombre</mat-label>
+                        <input matInput autocomplete="off" formControlName="Nombre">
+                    </mat-form-field>
+                </mat-grid-tile>
+                <mat-grid-tile [colspan]="1" [rowspan]="1">
+                    <mat-form-field class="ancho">
+                        <mat-label>Rfid</mat-label>
+                        <input matInput autocomplete="off" formControlName="Rfid">
+                    </mat-form-field>
+                </mat-grid-tile>
+                <mat-grid-tile [colspan]="1" [rowspan]="1">
+                    <button mat-raised-button style="margin-right: 20px;">Volver</button>
+                    <button type="submit" [disabled]="form.invalid" mat-raised-button color="primary" >Aceptar</button>
+                </mat-grid-tile>
+            </mat-grid-list>
+
+        </form>
+    </mat-card>
+
+</div>

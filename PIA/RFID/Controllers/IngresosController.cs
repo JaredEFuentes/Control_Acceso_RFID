@@ -25,9 +25,17 @@ namespace RFID.Controllers
 
         // GET: Ingresos
         [HttpGet]
-        public async Task<IEnumerable<Ingresos>> GetIngresos()
+        public async Task<IEnumerable<IngresoWNameVM>> GetIngresos()
         {
-            return await context.Ingresos.ToListAsync();
+            var ingresos = await context.Ingresos.Join(context.Empleado, ing => ing.EmpleadoId, emp => emp.Id, (ing, emp) => new IngresoWNameVM
+            {
+                RegistroId = ing.RegistroId,
+                Nombre = emp.Nombre,
+                Fecha = ing.Fecha.Month.ToString() + "/" + ing.Fecha.Day.ToString() + "/" + ing.Fecha.Year.ToString(),
+                Hora = ing.Fecha.ToShortTimeString()
+            }).ToListAsync();
+
+            return ingresos;
         }
 
         // GET: Ingresos/id
@@ -58,7 +66,8 @@ namespace RFID.Controllers
                 ingresos.Add(new IngresoVM
                 {
                     RegistroId = item.RegistroId,
-                    Fecha = item.Fecha
+                    Fecha = item.Fecha.Month.ToString() + "/" + item.Fecha.Day.ToString() + "/" + item.Fecha.Year.ToString(),
+                    Hora = item.Fecha.ToShortTimeString()
                 });
             }
 
@@ -70,26 +79,25 @@ namespace RFID.Controllers
             });
         }
 
-        [HttpGet("byDay/{day}/{month}/{year}")]
-        public async Task<IActionResult> GetIngresosbyDay(int day, int month, int year)
+        [HttpGet("byDay/{month}/{day}/{year}")]
+        public async Task<IActionResult> GetIngresosbyDay(int month, int day, int year)
         {
-            var empleados = await context.Empleado.ToListAsync();
-            var ingresos = await context.Ingresos.ToListAsync();
+            var Fecha = month.ToString() + "/" + day.ToString() + "/" + year.ToString();
+
+            var ingresos = await context.Ingresos.Join(context.Empleado, ing => ing.EmpleadoId, emp => emp.Id, (ing,emp) => new IngresoWNameVM { 
+                RegistroId = ing.RegistroId,
+                Nombre = emp.Nombre,
+                Fecha = ing.Fecha.Month.ToString() + "/" + ing.Fecha.Day.ToString() + "/" + ing.Fecha.Year.ToString(),
+                Hora = ing.Fecha.ToShortTimeString()
+            }).ToListAsync();
 
             var ingresosByDay = new List<IngresoWNameVM>();
-            var Fecha = day.ToString() + "/" + month.ToString() + "/" + year.ToString();
-
-            foreach (Ingresos item in ingresos)
+            
+            foreach (IngresoWNameVM item in ingresos)
             {
-                string fechaRegistro = item.Fecha.ToShortDateString();
-                if(fechaRegistro == Fecha)
+                if (item.Fecha == Fecha)
                 {
-                    ingresosByDay.Add(new IngresoWNameVM
-                    {
-                        RegistroId = item.RegistroId,
-                        Nombre = empleados.Find(s => s.Id == item.EmpleadoId).Nombre,
-                        Fecha = item.Fecha
-                    });
+                    ingresosByDay.Add(item);
                 }
             }
 
